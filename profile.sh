@@ -103,7 +103,7 @@ make-file() {
    if [  "$#" == "0" ]; then
    	    echo "Create file of 10 mb size in current directory"
    	    path="./$size.dat"
-   	    mkfile $size $path
+   	    mkfile "$size" "$path"
    	    return
    fi
 
@@ -118,7 +118,7 @@ make-file() {
    done
 
    echo "create file of $size in $path"
-   mkfile $size $path
+  mkfile "$size" "$path"
 }
 
 # Clear a directory
@@ -227,7 +227,7 @@ dl-website() {
 # displays paginated result with colored search terms and two lines surrounding each hit.
 # Example: mans cd name
 mans () {
-        man $1 | grep -iC2 --color=always $2 | less
+        man "$1" | grep -iC2 --color=always "$2" | less
 }
 
  # To create a ZIP archive of a folder
@@ -255,17 +255,17 @@ EOT
 extract () {
     if [ -f $1 ] ; then
       case $1 in
-        *.tar.bz2)   tar xjf $1     ;;
-        *.tar.gz)    tar xzf $1     ;;
-        *.bz2)       bunzip2 $1     ;;
-        *.rar)       unrar e $1     ;;
-        *.gz)        gunzip $1      ;;
-        *.tar)       tar xf $1      ;;
-        *.tbz2)      tar xjf $1     ;;
-        *.tgz)       tar xzf $1     ;;
-        *.zip)       unzip $1       ;;
-        *.Z)         uncompress $1  ;;
-        *.7z)        7z x $1        ;;
+        *.tar.bz2)   tar xjf "$1"     ;;
+        *.tar.gz)    tar xzf "$1"     ;;
+        *.bz2)       bunzip2 "$1"     ;;
+        *.rar)       unrar e "$1"     ;;
+        *.gz)        gunzip "$1"      ;;
+        *.tar)       tar xf "$1"      ;;
+        *.tbz2)      tar xjf "$1"     ;;
+        *.tgz)       tar xzf "$1"     ;;
+        *.zip)       unzip "$1"       ;;
+        *.Z)         uncompress "$1"  ;;
+        *.7z)        7z x "$1"        ;;
         *)     echo "'$1' cannot be extracted via extract()" ;;
          esac
      else
