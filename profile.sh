@@ -32,9 +32,7 @@ export PS1="--------------------------------------------------------------------
 export PS2="| => "
 export CLICOLOR=1
 export LSCOLORS=ExFxBxDxCxegedabagacad
-export EDITOR="/Applications/PhpStorm.app/Contents/MacOS/phpstorm"
 
-alias bash-profile-edit='pstorm ~/.bash_profile' #Edit bash profile
 # bash aliases do accept arguments, but only at the end
 # alias with argument alias cmd='_(){ echo "$@" end;unset -f _; }; _'
 alias alias_argument='_(){ echo This is cmd with argument "$@" end; unset -f _; }; _'
@@ -78,6 +76,7 @@ alias brewup-cask='brew update && brew upgrade && brew cleanup && brew cask outd
 alias lr='ls -R | grep ":$" | sed -e '\''s/:$//'\'' -e '\''s/[^-][^\/]*\//--/g'\'' -e '\''s/^/   /'\'' -e '\''s/-/|/'\'' | less'
 # Run last command with sudo
 alias sudo-last='sudo $(fc -ln -1)'
+
 
 #Creates a file of given size (all zeros) and given position
 #var: size (eg. 1m, 1g), path
@@ -139,7 +138,6 @@ cleardir() {
 
 # Copy current local files to a remote server
 dir-to-remote() { rsync -avz . $1; }
-
 
 # Run a bash shell as another user
 bash-as() { sudo -u $1 /bin/bash; }
@@ -273,6 +271,47 @@ extract () {
      fi
 }
 
+# split a directory files to  sub dir with size lime
+# var: $1 dir name, $2 size limit
+split(){
+  directory="$1"
+sizelimit="$2" # in MB
+sizesofar=0
+dircount=1
+du -s  "$directory"/* | while read -r size file
+do
+  if ((sizesofar + size > sizelimit))
+  then
+    (( dircount++ ))
+    sizesofar=0
+  fi
+  (( sizesofar += size ))
+  mkdir -p -- "$directory/sub_$dircount"
+  mv -- "$file" "$directory/sub_$dircount"
+done
+}
+
+# copy file to clipboard, only accept first parameter
+# var: full path of file name
+cpf() {
+    case $1 in
+        /*) file_name=$1;;
+        ~/*) file_name=$1;;
+        *) file_name=$PWD/$1;;
+    esac
+
+    if [[ ! -f "$file_name" ]]; then
+      echo Error: "$file_name" not found!
+      return
+    fi
+
+    osascript \
+        -e 'on run args' \
+        -e 'set the clipboard to POSIX file (first item of args)' \
+        -e end \
+        "$file_name"
+}
+
 #   ---------------------------
 #   4. SEARCHING
 #   ---------------------------
@@ -388,8 +427,6 @@ alias today='grep -h -d skip `date +%m/%d` /usr/share/calendar/*'
 alias mergepdf='/System/Library/Automator/Combine\ PDF\ Pages.action/Contents/Resources/join.py'
 
 alias task-complete='say -v "Zarvox" "Task complete"'
-
-
 
 
 
