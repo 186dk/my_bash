@@ -14,6 +14,10 @@ search() {
 #alfred; command:code; parameters: path; description: vs code open folder
 code () { VSCODE-CWD="$PWD" open -n -b "com.microsoft.VSCode" --args $* ;}
 
+# Open current folder or file with phpstorm
+# var: dir | file | none
+ps () { [[  "$#" == "0" ]] && { pstorm . ; true; } || pstorm "$@" ;}
+
 #   -----------------------------
 #   MAKE TERMINAL BETTER
 #   -----------------------------
@@ -67,16 +71,18 @@ alias make5mb='mkfile 5m ./5MB.dat'         # Creates a file of 5mb size (all ze
 alias make10mb='mkfile 10m ./10MB.dat'      # Creates a file of 10mb size (all zeros)
 alias less='less -FSRXc'                    # Preferred 'less' implementation
 alias .bp='. ~/.bash_profile'               # Source bash_profile
+
 # Home brew update
 alias brewup='brew update && brew upgrade && brew cleanup'
+
 # Home brew update cask
 alias brewup-cask='brew update && brew upgrade && brew cleanup && brew cask outdated | awk "{print $1}" | xargs brew cask reinstall && brew cask cleanup'
 
 #Full Recursive Directory Listing
 alias lr='ls -R | grep ":$" | sed -e '\''s/:$//'\'' -e '\''s/[^-][^\/]*\//--/g'\'' -e '\''s/^/   /'\'' -e '\''s/-/|/'\'' | less'
+
 # Run last command with sudo
 alias sudo-last='sudo $(fc -ln -1)'
-
 
 #Creates a file of given size (all zeros) and given position
 #var: size (eg. 1m, 1g), path
@@ -246,7 +252,7 @@ cdf () {
 EOT
         )
         echo "cd to \"$currFolderPath\""
-        cd "$currFolderPath"
+        cd "$currFolderPath" || return
 }
 
 #Extract most know archives with one command
@@ -310,6 +316,23 @@ cpf() {
         -e 'set the clipboard to POSIX file (first item of args)' \
         -e end \
         "$file_name"
+}
+
+# copy file content to clipboard, only accept first parameter
+# var: full path of file name
+cpc() {
+    case $1 in
+        /*) file_name=$1;;
+        ~/*) file_name=$1;;
+        *) file_name=$PWD/$1;;
+    esac
+
+    if [[ ! -f "$file_name" ]]; then
+      echo Error: "$file_name" not found!
+      return
+    fi
+
+   pbcopy < "$file_name"
 }
 
 #   ---------------------------
