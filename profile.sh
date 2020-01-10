@@ -6,8 +6,8 @@ chrome () {
     /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome "http://$1"
 }
 
-#alfred; command:search; parameters: query; description: chrome search query
-search() {
+#alfred; command:google-search; parameters: query; description: chrome search query
+google-search() {
     /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome "https://www.google.com/search?q=$*"
 }
 
