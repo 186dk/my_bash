@@ -18,6 +18,12 @@ code () { VSCODE-CWD="$PWD" open -n -b "com.microsoft.VSCode" --args $* ;}
 # var: dir | file | none
 ps () { [[  "$#" == "0" ]] && { pstorm . ; true; } || pstorm "$@" ;}
 
+# Open my bash profile with phpstorm
+psp (){ ps ~/my_bash/profile.sh ;}
+
+# go my bash folder
+my-bash() { cd ~/my_bash || return ;}
+
 #   -----------------------------
 #   MAKE TERMINAL BETTER
 #   -----------------------------
@@ -71,6 +77,7 @@ alias make5mb='mkfile 5m ./5MB.dat'         # Creates a file of 5mb size (all ze
 alias make10mb='mkfile 10m ./10MB.dat'      # Creates a file of 10mb size (all zeros)
 alias less='less -FSRXc'                    # Preferred 'less' implementation
 alias .bp='. ~/.bash_profile'               # Source bash_profile
+
 
 # Home brew update
 alias brewup='brew update && brew upgrade && brew cleanup'
@@ -358,6 +365,55 @@ ffe () { /usr/bin/find . -name '*'"$@" ; }
 #spotlight: Search for a file using MacOS Spotlight's metadata
 # var: file name
 spot () { mdfind "kMDItemDisplayName == '$@'wc"; }
+
+#search content by keywords and file formats
+# var: "keyword", path, *.html *.ini..
+search-content(){
+    keyword="$1"
+    typeStr="-type f"
+    case $# in
+        0)
+            echo 'var: "keyword", path, *.html *.ini..'
+            return
+            ;;
+        1)
+            path="."
+            ;;
+        
+        2)
+            path="$2"
+            ;;
+
+        *)
+            path="$2"
+            shift
+            shift
+
+            typeStr=""
+            counter=1
+            for var in "${@}"
+            do
+                if [ "${counter}" -eq "1" ]
+                 then
+                 typeStr="$typeStr-type f \( -name \"$var\""
+                 else
+                 typeStr="$typeStr -o -name \"$var\""
+                fi
+                
+                counter=$((counter +1))
+            done
+            typeStr="$typeStr \)"
+            ;;
+    esac
+    
+    cmdStr="find $path $typeStr -exec grep -inE --color '$keyword' /dev/null {} \;"
+    
+    eval $cmdStr
+    echo "----------"
+    echo 'Result: filename:line nu:keyword'
+    #echo $cmdStr
+}
+
 
 #   ---------------------------
 #   5. PROCESS MANAGEMENT
