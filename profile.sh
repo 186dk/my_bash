@@ -368,9 +368,10 @@ spot () { mdfind "kMDItemDisplayName == '$@'wc"; }
 
 #search content by keywords and file formats
 # var: "keyword", path, *.html *.ini..
-search-content(){
+search(){
     keyword="$1"
     typeStr="-type f"
+
     case $# in
         0)
             echo 'var: "keyword", path, *.html *.ini..'
@@ -406,12 +407,12 @@ search-content(){
             ;;
     esac
     
-    cmdStr="find $path $typeStr -exec grep -inE --color '$keyword' /dev/null {} \;"
+    cmdStr="find $path $typeStr -exec grep -inE --color '$keyword' /dev/null {} \; 2>&1 | grep --color=always -v \"Permission denied\""
     
-    eval $cmdStr
-    echo "----------"
+    eval "$cmdStr"
+    echo "---------------------------------"
     echo 'Result: filename:line nu:keyword'
-    #echo $cmdStr
+    echo "SearchCMD: $cmdStr"
 }
 
 
