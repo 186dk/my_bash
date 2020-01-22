@@ -16,7 +16,7 @@ code () { VSCODE-CWD="$PWD" open -n -b "com.microsoft.VSCode" --args $* ;}
 
 # Open current folder or file with phpstorm
 # var: dir | file | none
-ps () { [[  "$#" == "0" ]] && { pstorm . ; true; } || pstorm "$@" ;}
+pst () { [[  "$#" == "0" ]] && { pstorm . ; true; } || pstorm "$@" ;}
 
 # Open my bash profile with phpstorm
 psp (){ ps ~/my_bash/profile.sh ;}
@@ -164,7 +164,7 @@ dir-diff() { diff -u <( ls "$1" | sort)  <( ls "$2" | sort ); }
 
 #Find a command in your grep history
 #var: file name
-h () { history | grep "$@" ; }
+his () { history | grep "$@" ; }
 
 # Count of non-hidden files in current dir
 # var: none | path

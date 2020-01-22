@@ -5,7 +5,7 @@ Common alias and functions of bash profile.
 0. Clone the repo to home dir, and name as 'my_bash'
 0. Add following line to ~/.bash_profile
 ``` sh
-[ -s ~/my_bash/profile.sh ]] && source ~/my_bash/profile.sh
+[[ -s ~/my_bash/profile.sh ]] && source ~/my_bash/profile.sh
 ```
 
 ## Integrate with Alfred bash profile commands workflow
