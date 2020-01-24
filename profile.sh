@@ -22,8 +22,10 @@ pst () { [[  "$#" == "0" ]] && { pstorm . ; true; } || pstorm "$@" ;}
 psp (){ ps ~/my_bash/profile.sh ;}
 
 # go my bash folder
-my-bash() { cd ~/my_bash || return ;}
+mybash() { cd ~/my_bash || return ;}
 
+# Screen capture and put it to clipboard
+scr(){ screencapture -ci;}
 #   -----------------------------
 #   MAKE TERMINAL BETTER
 #   -----------------------------
@@ -380,7 +382,7 @@ search(){
         1)
             path="."
             ;;
-        
+
         2)
             path="$2"
             ;;
@@ -400,15 +402,15 @@ search(){
                  else
                  typeStr="$typeStr -o -name \"$var\""
                 fi
-                
+
                 counter=$((counter +1))
             done
             typeStr="$typeStr \)"
             ;;
     esac
-    
+
     cmdStr="find $path $typeStr -exec grep -inE --color '$keyword' /dev/null {} \; 2>&1 | grep --color=always -v \"Permission denied\""
-    
+
     eval "$cmdStr"
     echo "---------------------------------"
     echo 'Result: filename:line nu:keyword'
